@@ -11,16 +11,16 @@ import (
 	"github.com/maotan/go-truffle/cloud/serviceregistry"
 	"github.com/maotan/go-truffle/feign"
 	"github.com/maotan/go-truffle/util"
+	"github.com/maotan/go-truffle/yaml_config"
 	"math/rand"
 	"time"
 )
 
 func main() {
 
-	host := "127.0.0.1"
-	port := 8500
-	token := ""
-	registryDiscoveryClient, err := serviceregistry.NewConsulServiceRegistry(host, port, token)
+	consulConf :=yaml_config.YamlConf.ConsulConf
+	registryDiscoveryClient, err := serviceregistry.NewConsulServiceRegistry(consulConf.Host,
+		consulConf.Port, consulConf.Token)
 	feign.Init(registryDiscoveryClient)
 
 	ip, err := util.GetLocalIP()
@@ -29,11 +29,11 @@ func main() {
 	}
 	rand.Seed(time.Now().UnixNano())
 
-	si, _ := cloud.NewDefaultServiceInstance("go-user-server", ip, 5000,
+	ginConf := yaml_config.YamlConf.GinConf
+	si, _ := cloud.NewDefaultServiceInstance(ginConf.Name, ip, ginConf.Port,
 		false, map[string]string{"user": "zyn2"}, "")
-
 	registryDiscoveryClient.Register(si)
-	
+
 	err = routes.Run()
 	if err != nil{
 		registryDiscoveryClient.Deregister()

@@ -1,3 +1,11 @@
+gin:
+  name: gin-server
+  port: 5000
 log:
   log-path: E:/go-log
   rotation-count: 8
+consul:
+  host: 127.0.0.1
+  port: 8500
+  token:
+
