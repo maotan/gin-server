@@ -29,8 +29,8 @@ func main() {
 	}
 	rand.Seed(time.Now().UnixNano())
 
-	ginConf := yaml_config.YamlConf.GinConf
-	si, _ := cloud.NewDefaultServiceInstance(ginConf.Name, ip, ginConf.Port,
+	serverConf := yaml_config.YamlConf.ServerConf
+	si, _ := cloud.NewDefaultServiceInstance(serverConf.Name, ip, serverConf.Port,
 		false, map[string]string{"user": "zyn2"}, "")
 	registryDiscoveryClient.Register(si)
 

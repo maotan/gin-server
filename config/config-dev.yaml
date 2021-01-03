@@ -1,4 +1,4 @@
-gin:
+server:
   name: gin-server
   port: 5000
 log:
@@ -8,4 +8,10 @@ consul:
   host: 127.0.0.1
   port: 8500
   token:
+database:
+  name: mysql
+  host: xxx
+  port: 3306
+  username: xx
+  password: xx
 
