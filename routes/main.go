@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/maotan/go-truffle/logger"
 	"github.com/maotan/go-truffle/truffle"
@@ -13,6 +15,8 @@ var (
 
 // Run will start the server
 func Run() error{
+	store := cookie.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("my-session", store))
 	router.Use(logger.LogerMiddleware())
 	router.Use(truffle.Recover)
 	getRoutes()
