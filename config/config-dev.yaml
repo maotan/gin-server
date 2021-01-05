@@ -2,14 +2,14 @@ server:
   name: gin-server
   port: 5000
 log:
-  log-path: E:/go-log
+  log-path: E:/glog
   rotation-count: 8
 consul:
   host: 127.0.0.1
   port: 8500
   token:
 database:
-  name: mysql
+  type: mysql
   host: xxx
   port: 3306
   username: xx
