@@ -7,18 +7,12 @@ package main
 
 import (
 	"gin-server/routes"
-	"github.com/maotan/go-truffle/cloud"
-	"github.com/maotan/go-truffle/cloud/serviceregistry"
-	"github.com/maotan/go-truffle/feign"
-	"github.com/maotan/go-truffle/util"
-	"github.com/maotan/go-truffle/yaml_config"
-	"math/rand"
-	"time"
+	"github.com/maotan/go-truffle/web"
 )
 
 func main() {
 
-	consulConf :=yaml_config.YamlConf.ConsulConf
+	/*consulConf :=yaml_config.YamlConf.ConsulConf
 	registryDiscoveryClient, err := serviceregistry.NewConsulServiceRegistry(consulConf.Host,
 		consulConf.Port, consulConf.Token)
 	feign.Init(registryDiscoveryClient)
@@ -32,10 +26,13 @@ func main() {
 	serverConf := yaml_config.YamlConf.ServerConf
 	si, _ := cloud.NewDefaultServiceInstance(serverConf.Name, ip, serverConf.Port,
 		false, map[string]string{"user": "zyn2"}, "")
-	registryDiscoveryClient.Register(si)
-
+	registryDiscoveryClient.Register(si)*/
+	err, registryClient:= web.WebInit()
+	if err != nil{
+		panic(err)
+	}
 	err = routes.Run()
 	if err != nil{
-		registryDiscoveryClient.Deregister()
+		registryClient.Deregister()
 	}
 }
