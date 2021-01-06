@@ -1,6 +1,6 @@
 server:
   name: gin-server
-  port: 5000
+  port: 9000
 log:
   log-path: E:/glog
   rotation-count: 8
