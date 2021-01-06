@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func addUserRoutes(rg *gin.RouterGroup) {
-	users := rg.Group("/users")
+func AddUserRoutes(router *gin.Engine) {
+	users := router.Group("/users")
 
 	users.GET("/", func(c *gin.Context) {
 		session := sessions.Default(c)

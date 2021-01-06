@@ -16,8 +16,8 @@ func test() (int, error) {
 	return 8, errors.New("678899")
 }
 
-func addPingRoutes(rg *gin.RouterGroup) {
-	ping := rg.Group("/ping")
+func AddPingRoutes(router *gin.Engine) {
+	ping := router.Group("/v1/ping")
 	ping.GET("/", func(c *gin.Context) {
 		//panic(truffle.NewWarnError(500,"12345"))
 		test()

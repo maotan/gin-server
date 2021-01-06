@@ -1,6 +1,6 @@
 package routes
 
-import (
+/*import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -40,4 +40,4 @@ func getRoutes() {
 
 	v2 := router.Group("/v2")
 	addPingRoutes(v2)
-}
+}*/
