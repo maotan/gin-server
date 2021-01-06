@@ -7,37 +7,22 @@ package main
 
 import (
 	"gin-server/routes"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/maotan/go-truffle/logger"
-	"github.com/maotan/go-truffle/truffle"
 	"github.com/maotan/go-truffle/web"
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 	
-	err, registryClient:= web.WebInit()
+	err, registryClient:= web.ConsulInit()
 	if err != nil{
 		panic(err)
 	}
-	//err = routes.Run()
+
 	router := gin.Default()
-	store := cookie.NewStore([]byte("secret"))
-	router.Use(sessions.Sessions("my-session", store))
-	router.Use(logger.LogerMiddleware())
-	router.Use(truffle.Recover)
-	// --------router ---------
-	router.GET("/actuator/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	web.RouterInit(router)
 	routes.AddUserRoutes(router)
 	routes.AddPingRoutes(router)
-	// --------router end------
-
 
 	log.Info("app run...")
 	err = router.Run(":5000")
