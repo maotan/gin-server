@@ -11,15 +11,18 @@ import (
 )
 
 func AddUserRoutes(router *gin.Engine) {
+	// gin.H{} 用于直接生成json对象
 	users := router.Group("/v1/users")
 
 	users.GET("/", func(c *gin.Context) {
 		session := sessions.Default(c)
-		u := session.Get("user")
-		c.JSON(http.StatusOK, gin.H{"user":u})
-	})
-	users.GET("/comments", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "users comments")
+		userId := session.Get("userId")
+		userDb := &model.User{}
+		gosql.Model(userDb).Where("id=?", userId).Get()
+		if userDb.Id == 0{
+			panic(truffle.NewWarnError(40400, "不存在该用户"))
+		}
+		c.JSON(http.StatusOK, truffle.Success(userDb))
 	})
 
 	// 创建用户
@@ -33,7 +36,26 @@ func AddUserRoutes(router *gin.Engine) {
 		user.Id = id
 		gosql.Model(&user).Create()
 
-		ctx.JSON(http.StatusOK, user)
+		ctx.JSON(http.StatusOK, truffle.Success(user))
+	})
+
+	// 没有前端模拟登录
+	users.GET("/login", func(ctx *gin.Context) {
+		mobile := ctx.Query("mobile")
+		if mobile == ""{
+			panic(truffle.NewWarnError(40000, "参数错误"))
+		}
+		//Get
+		userDb := &model.User{}
+		gosql.Model(userDb).Where("mobile=?", mobile).Get()
+		if userDb.Id == 0{
+			panic(truffle.NewWarnError(40400, "不存在该用户"))
+		}
+
+		session := sessions.Default(ctx)
+		session.Set("userId", userDb.Id)
+		session.Save()
+		ctx.JSON(http.StatusOK, truffle.Success(userDb))
 	})
 
 	// 登录
@@ -45,10 +67,13 @@ func AddUserRoutes(router *gin.Engine) {
 		//Get
 		userDb := &model.User{}
 		gosql.Model(userDb).Where("mobile=?",user.Mobile).Get()
+		if userDb.Id == 0{
+			panic(truffle.NewWarnError(40400, "不存在该用户"))
+		}
 
 		session := sessions.Default(ctx)
-		session.Set("user", userDb.Id)
+		session.Set("userId", userDb.Id)
 		session.Save()
-		ctx.JSON(http.StatusOK, userDb)
+		ctx.JSON(http.StatusOK, truffle.Success(userDb))
 	})
 }
