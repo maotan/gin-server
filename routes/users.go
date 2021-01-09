@@ -36,6 +36,7 @@ func AddUserRoutes(router *gin.Engine) {
 		ctx.JSON(http.StatusOK, user)
 	})
 
+	// 登录
 	users.POST("/login", func(ctx *gin.Context) {
 		var user model.User
 		if err := ctx.BindJSON(&user); err != nil {
