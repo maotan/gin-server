@@ -62,7 +62,7 @@ func AddUserRoutes(router *gin.Engine) {
 	users.POST("/login", func(ctx *gin.Context) {
 		var user model.User
 		if err := ctx.BindJSON(&user); err != nil {
-			panic(truffle.NewWarnError(400, "参数错误"))
+			panic(truffle.NewWarnError(40000, "参数错误"))
 		}
 		//Get
 		userDb := &model.User{}
