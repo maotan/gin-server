@@ -23,6 +23,8 @@ func main() {
 
 	router := gin.Default()
 	web.RouterInit(router)
+	web.DatabaseInit()  // db
+
 	routes.AddUserRoutes(router)
 	routes.AddPingRoutes(router)
 

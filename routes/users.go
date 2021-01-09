@@ -1,15 +1,17 @@
 package routes
 
 import (
+	"gin-server/model"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"github.com/ilibs/gosql/v2"
+	"github.com/maotan/go-truffle/truffle"
 	"github.com/maotan/go-truffle/util"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func AddUserRoutes(router *gin.Engine) {
-	users := router.Group("/users")
+	users := router.Group("/v1/users")
 
 	users.GET("/", func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -19,14 +21,33 @@ func AddUserRoutes(router *gin.Engine) {
 	users.GET("/comments", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "users comments")
 	})
-	users.GET("/pictures", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "users pictures")
-	})
-	users.GET("/set", func(c *gin.Context) {
-		session := sessions.Default(c)
+
+	// 创建用户
+	users.POST("/", func(ctx *gin.Context) {
+		var user model.User
+		if err := ctx.BindJSON(&user); err != nil {
+			panic(truffle.NewWarnError(400, "参数错误"))
+		}
+		user.Account = user.Mobile
 		id := util.GenSnowFlakeId()
-		session.Set("user", id)
+		user.Id = id
+		gosql.Model(&user).Create()
+
+		ctx.JSON(http.StatusOK, user)
+	})
+
+	users.POST("/login", func(ctx *gin.Context) {
+		var user model.User
+		if err := ctx.BindJSON(&user); err != nil {
+			panic(truffle.NewWarnError(400, "参数错误"))
+		}
+		//Get
+		userDb := &model.User{}
+		gosql.Model(userDb).Where("mobile=?",user.Mobile).Get()
+
+		session := sessions.Default(ctx)
+		session.Set("user", userDb.Id)
 		session.Save()
-		c.JSON(http.StatusOK, "users set")
+		ctx.JSON(http.StatusOK, userDb)
 	})
 }
