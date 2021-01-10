@@ -19,7 +19,7 @@ func test() (int, error) {
 
 func AddPingRoutes(router *gin.Engine) {
 	ping := router.Group("/v1/ping")
-	ping.POST("/post", func(ctx *gin.Context) {
+	ping.POST("", func(ctx *gin.Context) {
 		var pingDo domain.PingDo
 		if err := ctx.BindJSON(&pingDo); err != nil {
 			panic(truffle.NewWarnError(40000, "参数错误"))
@@ -27,7 +27,7 @@ func AddPingRoutes(router *gin.Engine) {
 		ctx.JSON(http.StatusCreated, pingDo)
 	})
 
-	ping.POST("/", func(c *gin.Context) {
+	ping.GET("", func(c *gin.Context) {
 		//panic(truffle.NewWarnError(500,"12345"))
 		test()
 		var p Person
