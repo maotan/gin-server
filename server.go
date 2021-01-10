@@ -21,7 +21,7 @@ func main() {
 		panic(err)
 	}
 
-	router := gin.Default()
+	router := gin.New()
 	web.RouterInit(router)
 	web.DatabaseInit()  // db
 
