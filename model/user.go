@@ -8,12 +8,12 @@ package model
 import "time"
 
 type User struct {
-	Id        	int64       `db:"id"`
+	Id        	int64    `db:"id"`
 	Account     string   `db:"account"`
-	Mobile	    string   `db:"mobile"`
-	Nick     	string    `db:"nick"`
-	Password	string 	  `db:"password"`
-	Status    	int8       `db:"status"`
+	Mobile	    string   `db:"mobile" binding:"required"`
+	Nick     	string   `db:"nick"`
+	Password	string 	 `db:"password"`
+	Status    	int8     `db:"status"`
 	CreateTime time.Time `db:"create_time"`
 	UpdateTime time.Time `db:"update_time"`
 }

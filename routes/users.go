@@ -25,15 +25,17 @@ func AddUserRoutes(router *gin.Engine) {
 		c.JSON(http.StatusOK, truffle.Success(userDb))
 	})
 
-	// 创建用户
+	// 网页创建用户
 	users.POST("/", func(ctx *gin.Context) {
 		var user model.User
 		if err := ctx.BindJSON(&user); err != nil {
-			panic(truffle.NewWarnError(400, "参数错误"))
+			panic(truffle.NewWarnError(400, err.Error()))
 		}
 		user.Account = user.Mobile
 		id := util.GenSnowFlakeId()
+		pwd := util.GenMd5(user.Password)
 		user.Id = id
+		user.Password = pwd
 		gosql.Model(&user).Create()
 
 		ctx.JSON(http.StatusOK, truffle.Success(user))
