@@ -24,7 +24,7 @@ func AddPingRoutes(router *gin.Engine) {
 		if err := ctx.BindJSON(&pingDo); err != nil {
 			panic(truffle.NewWarnError(40000, "参数错误"))
 		}
-		ctx.JSON(http.StatusCreated, pingDo)
+		ctx.JSON(http.StatusCreated, truffle.Success(pingDo))
 	})
 
 	ping.GET("", func(c *gin.Context) {
