@@ -10,7 +10,7 @@ import (
 	"gin-server/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/maotan/go-truffle/web"
-	"github.com/maotan/go-truffle/yaml_config"
+	"github.com/maotan/go-truffle/yamlconf"
 	log "github.com/sirupsen/logrus"
 )
 
