@@ -28,7 +28,7 @@ func main() {
 	routes.AddUserRoutes(router)
 	routes.AddPingRoutes(router)
 
-	serverConf := yaml_config.YamlConf.ServerConf
+	serverConf := yamlconf.YamlConf.ServerConf
 	runHostPort := fmt.Sprintf(":%d", serverConf.Port)
 	log.Info("app run...")
 	err = router.Run(runHostPort)
